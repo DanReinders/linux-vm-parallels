@@ -6,14 +6,14 @@ sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
 sudo apt-get install -y apache2
 
-touch /etc/apache2/sites-available/mysite.conf
-cat << EOF | sudo tee -a /etc/apache2/sites-available/mysite.conf
+touch /etc/apache2/sites-available/vmtest.conf
+cat << EOF | sudo tee -a /etc/apache2/sites-available/vmtest.conf
 <VirtualHost *:80>
-  ServerName mysite.vm
-  ServerAlias *.mysite.vm
+  ServerName vmtest.vm
+  ServerAlias *.vmtest.vm
   DirectoryIndex index.php index.html
-  DocumentRoot /var/www/public
-    <Directory /var/www/public/ >
+  DocumentRoot /var/www/html
+    <Directory /var/www/html/>
       Options Indexes FollowSymLinks
       AllowOverride All
       Require all granted
@@ -22,10 +22,10 @@ cat << EOF | sudo tee -a /etc/apache2/sites-available/mysite.conf
 EOF
 
 sudo a2dissite 000-default.conf
-sudo a2ensite mysite.conf
+sudo a2ensite vmtest.conf
 sudo a2enmod rewrite actions
 
-sudo apt-get install -y php7.2 php7.2-curl php7.2-xml php7.2-zip php7.2-gd php7.2-mysql php7.2-mbstring php-xdebug
+sudo apt-get install -y php7.0 php7.0-curl php7.0-xml php7.0-zip php7.0-gd php7.0-mysql php7.0-mbstring php-xdebug php7.0-mcrypt php7.0-intl php7.0-soap php7.0-bcmath
 
 # MySQL
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
@@ -41,16 +41,16 @@ echo "------------------------"
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
-sudo apt-get install -y libapache2-mod-php7.2
+sudo apt-get install -y libapache2-mod-php7.0
 sudo a2dismod mpm_event
 sudo a2enmod mpm_prefork
 
-sudo apt-get install nodejs
+sudo apt-get install -y nodejs
 
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt-get update
-sudo apt-get install yarn
+sudo apt-get install -y yarn
 
 
 # Cleanup
